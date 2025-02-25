@@ -41,11 +41,13 @@ jobs:
        uses: docker/metadata-action@v5
        with:
          images: ghcr.io/${{ github.repository }}
-         
+
 
      - name: executing remote ssh commands using ssh key
        uses: appleboy/ssh-action@v1.2.1
        with:
+        username: ${{ secrets.USERNAME }}
+        port : ${{ secrets.PORT }}
         host: ${{ secrets.ADDRESS }}
         key: ${{ secrets.STUDENT_KEY }}
         passphrase : ${{ secrets.PASSPHRASE }}
