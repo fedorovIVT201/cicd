@@ -41,6 +41,7 @@ jobs:
        uses: docker/metadata-action@v5
        with:
          images: ghcr.io/${{ github.repository }}
+         
 
      - name: executing remote ssh commands using ssh key
        uses: appleboy/ssh-action@v1.2.1
