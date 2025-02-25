@@ -42,6 +42,13 @@ jobs:
        with:
          images: ghcr.io/${{ github.repository }}
 
+     - name: executing remote ssh commands using ssh key
+       uses: appleboy/ssh-action@v1.2.1
+       with:
+        host: ${{ secrets.ADDRESS }}
+        key: ${{ secrets.STUDENT_KEY }}
+        passphrase : ${{ secrets.PASSPHRASE }}
+        script: whoami
 
      - name: Build and push Docker image
        uses: docker/build-push-action@v5
