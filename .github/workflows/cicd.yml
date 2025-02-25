@@ -63,7 +63,7 @@ jobs:
          key: ${{ secrets.STUDENT_KEY }}
          passphrase: ${{ secrets.PASSPHRASE }}
          script: |
-          whoami
-          docker container prune
+          cd test_cicd
+          docker compose down
           docker pull ghcr.io/fedorovivt201/cicd:main
-          docker compose up
+          docker compose up -d
