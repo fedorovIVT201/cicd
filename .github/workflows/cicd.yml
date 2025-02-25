@@ -16,6 +16,7 @@ jobs:
 
      - run: pytest
  build:
+   needs: testing
    runs-on: ubuntu-latest
 
 
@@ -42,17 +43,6 @@ jobs:
        with:
          images: ghcr.io/${{ github.repository }}
 
-
-     - name: executing remote ssh commands using ssh key
-       uses: appleboy/ssh-action@v1.2.1
-       with:
-        username: ${{ secrets.USERNAME }}
-        port : ${{ secrets.PORT }}
-        host: ${{ secrets.ADDRESS }}
-        key: ${{ secrets.STUDENT_KEY }}
-        passphrase : ${{ secrets.PASSPHRASE }}
-        script: whoami
-
      - name: Build and push Docker image
        uses: docker/build-push-action@v5
        with:
@@ -60,3 +50,20 @@ jobs:
          push: true
          tags: ${{ steps.meta.outputs.tags }}
          labels: ${{ steps.meta.outputs.labels }}
+ deployment:
+   needs: build
+   runs-on: ubuntu-latest
+   steps:
+     - name: executing remote ssh commands using ssh key
+       uses: appleboy/ssh-action@v1.2.1
+       with:
+         username: ${{ secrets.USERNAME }}
+         port: ${{ secrets.PORT }}
+         host: ${{ secrets.ADDRESS }}
+         key: ${{ secrets.STUDENT_KEY }}
+         passphrase: ${{ secrets.PASSPHRASE }}
+         script: |
+          whoami
+          docker container prune
+          docker pull ghcr.io/fedorovivt201/cicd:main
+          docker compose up
